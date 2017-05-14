@@ -47,9 +47,9 @@ id                       [a-z][a-zA-Z0-9]*
 "+="                     TOKEN(PLUSEQ)
 "-="                     TOKEN(MINUSEQ)
 ","                      TOKEN(COMA)
-{number}                 INTEGER_TOKEN(INTEGER)
-{id}                     ID_TOKEN(ID)
-{letter}?\"[^\n"]*\"     STRING_TOKEN(STRING)
+{number}                 TOKEN(INTEGER)
+{id}                     TOKEN(ID)
+\"[^\n"]*\"              TOKEN(STRING)
 \/\*[^"]*\*\/            ;
 \/\/[^\n"]*              ;
 "\n"                     ;
