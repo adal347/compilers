@@ -1,6 +1,6 @@
 %{
 #ifdef PRINT
-#define TOKEN(t) print("Token: " #t "\n");
+#define TOKEN(t) printf("Token: " #t "\n");
 #else
 #define TOKEN(t) return (t);
 #endif
