@@ -6,6 +6,11 @@
 #endif
 %}
 
+digit                    [0-9]
+letter                   [a-zA-Z]
+number                   {digit}+
+id                       [a-z][a-zA-Z0-9]*
+
 %%
 "cilk"                   TOKEN(CILK)
 "spawn"                  TOKEN(SPAWN)
@@ -42,4 +47,12 @@
 "+="                     TOKEN(PLUSEQ)
 "-="                     TOKEN(MINUSEQ)
 ","                      TOKEN(COMA)
+{number}                 INTEGER_TOKEN(INTEGER)
+{id}                     ID_TOKEN(ID)
+{letter}?\"[^\n"]*\"     STRING_TOKEN(STRING)
+\/\*[^"]*\*\/            ;
+\/\/[^\n"]*              ;
+"\n"                     ;
+[[:space:]]+             ;
+.                        printf("illegal token\n");
 %%

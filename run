@@ -1,4 +1,5 @@
 #!/bin/sh
 flex lexer.l
 gcc -o lexer -DPRINT lex.yy.c -lfl
-./lexer
+
+bison parser.y
