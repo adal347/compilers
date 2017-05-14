@@ -1,3 +1,4 @@
 # Lexer and lexer.yy.c
 lexer
-lexer.yy.c
+lex.yy.c
+parser.tab.c
