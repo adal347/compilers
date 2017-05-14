@@ -4,6 +4,7 @@
        OPAREN CPAREN OPCOR CCOR SEMICOLON PLUSEQ
        MINUSEQ COMA
 %token ID INTEGER STRING
+
 %%
 
 program : declarationList

@@ -1,5 +1,8 @@
 #!/bin/sh
 flex lexer.l
-gcc -o lexer -DPRINT lex.yy.c -lfl
+bison -t parser.y
 
-bison parser.y
+gcc -o parser parser.tab.c parser.c -lfl -DYYDEBUG
+
+parser < test/cilk_test.c
+parser < test/cilk_test_2.c
