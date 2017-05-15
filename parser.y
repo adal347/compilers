@@ -53,6 +53,7 @@
   #ifdef DEBUG
   void printTree(TERNARY_TREE, int);
   #endif
+  void writeCode(TERNARY_TREE);
 
   struct symTabNode {
     char identifier[IDLENGTH];
@@ -74,7 +75,7 @@
   TERNARY_TREE tVal;
 }
 
-%token CILK SPAWN CILK_SYNC CILK_FOR PRINT RETURN
+%token CILK MAIN SPAWN CILK_SYNC CILK_FOR PRINT RETURN
        IF ELSE INT CHAR LT GT LE GE NE NOT EQ AND
        OR PP MM ASSIGN PLUS MINUS MULT DIVIDE MOD
        OPAREN CPAREN OPCOR CCOR SEMICOLON PLUSEQ
@@ -97,6 +98,7 @@ program : declarationList
             #ifdef DEBUG
             printTree(ParseTree, 0);
             #endif
+            writeCode(ParseTree);
           }
 ;
 
@@ -152,9 +154,9 @@ typeSpecifier : INT
                 }
 ;
 
-funDeclaration : CILK typeSpecifier varDeclId OPAREN CPAREN OPCOR statement CCOR
+funDeclaration : CILK INT MAIN OPAREN CPAREN OPCOR statement CCOR
                   {
-                    $$ = create_node(NOTHING, FUNDECLARATION, $2, $3, $7, NULL, NULL);
+                    $$ = create_node(NOTHING, FUNDECLARATION, $7, NULL, NULL, NULL, NULL);
                   }
 ;
 
@@ -208,7 +210,7 @@ iterationStmt : CILK_FOR OPAREN expression SEMICOLON relExpression SEMICOLON exp
 
 expression : typeSpecifier varDeclList
                 {
-                  $$ = create_node(NOTHING, EXPRESSION, $1, NULL, $2, NULL, NULL);
+                  $$ = create_node(NOTHING, EXPRESSION, $1, $2, NULL, NULL, NULL);
                 }
              | mutable ASSIGN sumExpression
                 {
@@ -389,5 +391,200 @@ void printTree(TERNARY_TREE t, int indent) {
   printTree(t->fifth, indent+3);
 }
 #endif
+
+void writeCode(TERNARY_TREE t) {
+
+  if (t == NULL) return;
+  switch(t->nodeIdentifier) {
+    case (DECLARATIONLIST):
+      if (t->second == NULL) writeCode(t->first);
+      writeCode(t->first);
+      writeCode(t->second);
+      return;
+    case (VARDECLARATION):
+      writeCode(t->first);
+      writeCode(t->second);
+      printf(";\n");
+      return;
+    case (VARDECLLIST):
+      writeCode(t->first);
+      if(t->second != NULL) {
+        printf(", ");
+        writeCode(t->second);
+      }
+      return;
+    case (VARDECLID):
+      if(t->item > 0 && t->item < SYMTABSIZE)
+        printf("%s ", symTab[t->item]->identifier);
+      else
+        printf("ID ");
+      return;
+    case (TYPEESPECIFIER):
+      if(t->item == INT)
+        printf("int ");
+      else
+        printf("char ");
+      return;
+    case (FUNDECLARATION):
+      printf("int main(){\n" );
+      writeCode(t->first);
+      printf("}\n");
+      return;
+    case (EXPRESSIONSTMT):
+      if (t->item == SEMICOLON) printf(";\n");
+      else if(t->second == NULL) {
+        writeCode(t->first);
+        printf(";\n");
+      } else {
+        writeCode(t->first);
+        printf(";\n");
+        writeCode(t->second);
+      }
+      return;
+    case (SELECTIONSTMT):
+      if (t->item != ELSE) {
+        printf("if (");
+        writeCode(t->first);
+        printf(") {\n");
+        writeCode(t->second);
+        printf("}\n");
+        writeCode(t->third);
+      } else {
+        printf("if (");
+        writeCode(t->first);
+        printf(") {\n");
+        writeCode(t->second);
+        printf("} else {\n");
+        writeCode(t->third);
+        printf("}\n");
+        writeCode(t->fourth);
+      }
+      return;
+    case (ITERATIONSTMT):
+      printf("for (");
+      writeCode(t->first);
+      printf("; ");
+      writeCode(t->second);
+      printf("; ");
+      writeCode(t->third);
+      printf(") {\n");
+      writeCode(t->fourth);
+      printf("}\n");
+      writeCode(t->fifth);
+      return;
+    case (EXPRESSION):
+      if (t->item == NOTHING && t->second != NULL) {
+        writeCode(t->first);
+        writeCode(t->second);
+      } else if (t->item == ASSIGN) {
+        writeCode(t->first);
+        printf(" = ");
+        writeCode(t->second);
+      } else if (t->item == PLUSEQ) {
+        writeCode(t->first);
+        printf(" += ");
+        writeCode(t->second);
+      } else if (t->item == MINUSEQ) {
+        writeCode(t->first);
+        printf(" -= ");
+        writeCode(t->second);
+      } else if (t->item == PP) {
+        writeCode(t->first);
+        printf("++");
+      } else if (t->item == MM) {
+        writeCode(t->first);
+        printf("--");
+      } else {
+        writeCode(t->first);
+      }
+      return;
+    case (SIMPLEEXPRESSION):
+      if (t->second != NULL) {
+        writeCode(t->first);
+        printf(" || ");
+        writeCode(t->second);
+      } else {
+        writeCode(t->first);
+      }
+      return;
+    case (ANDEXPRESSION):
+      if (t->second != NULL) {
+        writeCode(t->first);
+        printf(" && ");
+        writeCode(t->second);
+      } else {
+        writeCode(t->first);
+      }
+      return;
+    case (UNARYRELEXPRESSION):
+      if (t->item == NOT) {
+        printf("!");
+        writeCode(t->first);
+      } else {
+        writeCode(t->first);
+      }
+      return;
+    case (RELEXPRESSION):
+      writeCode(t->first);
+      writeCode(t->second);
+      writeCode(t->third);
+      return;
+    case (RELOP):
+      if (t->item == LE) {
+        printf(" <= ", t->item);
+      } else if (t->item == LT) {
+        printf(" < ", t->item);
+      } else if (t->item == GT) {
+        printf(" > ", t->item);
+      } else if (t->item == GE) {
+        printf(" >= ", t->item);
+      } else if (t->item == EQ) {
+        printf(" == ", t->item);
+      } else if (t->item == NE) {
+        printf(" != ", t->item);
+      }
+      return;
+    case (SUMEXPRESSION):
+      writeCode(t->first);
+      writeCode(t->second);
+      writeCode(t->third);
+      return;
+    case (SUMOP):
+      if (t->item == PLUS) {
+        printf(" + ", t->item);
+      } else {
+        printf(" - ", t->item);
+      }
+      return;
+    case (RETURNSTMT):
+      printf("return ");
+      writeCode(t->first);
+      printf(";\n");
+      return;
+    case (STRING_VALUE):
+      if(t->item > 0 && t->item < SYMTABSIZE)
+        printf("%s ", symTab[t->item]->identifier);
+      else
+        printf("STRING ");
+      return;
+    case (INTEGER_VALUE):
+      printf("%d", t->item);
+      return;
+    case (ID_VALUE):
+      if(t->item > 0 && t->item < SYMTABSIZE)
+        printf("%s ", symTab[t->item]->identifier);
+      else
+        printf("ID ");
+      return;
+    default:
+      writeCode(t->first);
+      return;
+  }
+  writeCode(t->first, indent+3);
+  writeCode(t->second, indent+3);
+  writeCode(t->third, indent+3);
+  writeCode(t->fourth, indent+3);
+  writeCode(t->fifth, indent+3);
+}
 
 #include "lex.yy.c"

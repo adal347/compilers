@@ -1,6 +1,6 @@
 #!/bin/sh
 flex lexer.l
-bison -t parser.y
+bison parser.y
 
 gcc -o parser parser.tab.c parser.c -lfl
 

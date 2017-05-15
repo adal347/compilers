@@ -23,6 +23,7 @@ id                       [a-z][a-zA-Z0-9]*
 
 %%
 "cilk"                   TOKEN(CILK)
+"main"                   TOKEN(MAIN)
 "spawn"                  TOKEN(SPAWN)
 "Cilk_sync"              TOKEN(CILK_SYNC)
 "Cilk_for"               TOKEN(CILK_FOR)
