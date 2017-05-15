@@ -396,6 +396,11 @@ void writeCode(TERNARY_TREE t) {
 
   if (t == NULL) return;
   switch(t->nodeIdentifier) {
+    case (PROGRAM):
+      printf(#include <stdio.h>;\n);
+      printf(#include <stdlib.h>;\n);
+      writeCode(t->first);
+      return
     case (DECLARATIONLIST):
       if (t->second == NULL) writeCode(t->first);
       writeCode(t->first);

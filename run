@@ -4,5 +4,8 @@ bison parser.y
 
 gcc -o parser parser.tab.c parser.c -lfl
 
-./parser < test/cilk_test.c
-./parser < test/cilk_test_2.c
+./parser < test/cilk_test.c > code_generator.c
+gcc -o code_generator code_generator.c
+
+./parser < test/cilk_test_2.c > code_generator_2.c
+gcc -o code_generator_2 code_generator_2.c
