@@ -60,7 +60,7 @@ id                       [a-z][a-zA-Z0-9]*
 ","                      TOKEN(COMA)
 {number}                 INTEGER_TOKEN(INTEGER)
 {id}                     ID_TOKEN(ID)
-\"[^\n"]*\"              STRING_TOKEN(STRING)
+\'[^\n"]*\'              STRING_TOKEN(STRING)
 \/\*[^"]*\*\/            ;
 \/\/[^\n"]*              ;
 "\n"                     ;

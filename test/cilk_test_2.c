@@ -2,7 +2,7 @@ int a, b, c;
 
 cilk int main(){
   char i, j;
-  i = "Hola";
+  i = 'H';
   c = 0;
   //This is a comment
   /* Another Comment */

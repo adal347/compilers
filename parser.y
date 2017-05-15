@@ -403,8 +403,10 @@ void writeCode(TERNARY_TREE t) {
       return;
     case (DECLARATIONLIST):
       if (t->second == NULL) writeCode(t->first);
-      writeCode(t->first);
-      writeCode(t->second);
+      else {
+        writeCode(t->first);
+        writeCode(t->second);
+      }
       return;
     case (VARDECLARATION):
       writeCode(t->first);
