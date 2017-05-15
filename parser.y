@@ -574,7 +574,7 @@ void writeCode(TERNARY_TREE t) {
       if(t->item > 0 && t->item < SYMTABSIZE)
         printf("%s ", symTab[t->item]->identifier);
       else
-        printf("ID ");
+        printf("a ");
       return;
     default:
       writeCode(t->first);
