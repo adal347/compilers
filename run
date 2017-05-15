@@ -2,7 +2,7 @@
 flex lexer.l
 bison -t parser.y
 
-gcc -o parser parser.tab.c parser.c -lfl -DYYDEBUG
+gcc -o parser parser.tab.c parser.c -lfl
 
 ./parser < test/cilk_test.c
 ./parser < test/cilk_test_2.c
