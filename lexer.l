@@ -8,7 +8,7 @@
 #define TOKEN(t) return (t);
 #define INTEGER_TOKEN(t) yylval.iVal = atoi(yytext); return (t);
 #define ID_TOKEN(t) yylval.iVal = installId(yytext); return (t);
-#define STRING_TOKEN(t) yylval.iVal = installid(yytext); return (t);
+#define STRING_TOKEN(t) yylval.iVal = installId(yytext); return (t);
 #endif
 
 #include <strings.h>
