@@ -580,11 +580,11 @@ void writeCode(TERNARY_TREE t) {
       writeCode(t->first);
       return;
   }
-  writeCode(t->first, indent+3);
-  writeCode(t->second, indent+3);
-  writeCode(t->third, indent+3);
-  writeCode(t->fourth, indent+3);
-  writeCode(t->fifth, indent+3);
+  writeCode(t->first);
+  writeCode(t->second);
+  writeCode(t->third);
+  writeCode(t->fourth);
+  writeCode(t->fifth);
 }
 
 #include "lex.yy.c"
