@@ -1,4 +1,11 @@
 # Lexer and lexer.yy.c
 lexer
 lex.yy.c
+
+# parser and parser.tab.c
 parser.tab.c
+parser
+
+#Code generator of tests
+code_generator
+code_generator_2
