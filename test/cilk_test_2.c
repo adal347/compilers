@@ -1,19 +1,19 @@
-int x, y;
+int a, b, c;
 
 cilk int main(){
-  char x, y;
-  x = "Hola";
+  char i, j;
+  i = "Hola";
+  c = 0;
   //This is a comment
   /* Another Comment */
-  Cilk_for (x = 1; x < 1; x--) {
-    int a;
-    x += y;
-    y = x + 1;
+  Cilk_for (a = 1; a < 1; a--) {
+    c += a;
+    b = c + 1;
   }
-  if (x < y) {
-    x -= y;
+  if (a < b) {
+    a -= b;
   } else {
-    x += y;
+    a += b;
   }
   return 0;
 }
