@@ -1,8 +1,14 @@
 %{
 #ifdef PRINT
 #define TOKEN(t) printf("Token: " #t "\n");
+#define INTEGER_TOKEN(t) printf("Number %d Token: " #t "\n", atoi(yytext));
+#define ID_TOKEN(t) printf("ID %s Token: " #t "\n", yytext);
+#define STRING_TOKEN(t) printf("String %s Token: " #t "\n", yytext);
 #else
 #define TOKEN(t) return (t);
+#define INTEGER_TOKEN(t) yylval.iVal = atoi(yytext); return (t);
+#define ID_TOKEN(t) yylval.iVal = installId(yytext); return (t);
+#define STRING_TOKEN(t) yylval.iVal = installid(yytext); return (t);
 #endif
 
 #include <strings.h>
@@ -51,12 +57,53 @@ id                       [a-z][a-zA-Z0-9]*
 "+="                     TOKEN(PLUSEQ)
 "-="                     TOKEN(MINUSEQ)
 ","                      TOKEN(COMA)
-{number}                 TOKEN(INTEGER)
-{id}                     TOKEN(ID)
-\"[^\n"]*\"              TOKEN(STRING)
+{number}                 INTEGER_TOKEN(INTEGER)
+{id}                     ID_TOKEN(ID)
+\"[^\n"]*\"              STRING_TOKEN(STRING)
 \/\*[^"]*\*\/            ;
 \/\/[^\n"]*              ;
 "\n"                     ;
 [[:space:]]+             ;
 .                        printf("illegal token\n");
 %%
+
+SYMTABNODEPTR newSymTabNode() {
+    return ((SYMTABNODEPTR)malloc(sizeof(SYMTABNODE)));
+}
+
+int installId(char *id){
+    extern SYMTABNODEPTR symTab[SYMTABSIZE];
+    extern int currentSymTabSize;
+    int index;
+
+    index = lookup(id);
+    if(index >= 0){
+        return (index);
+    }else{
+        if(currentSymTabSize >= SYMTABSIZE){
+            /*symtab is full*/
+            return (NOTHING);
+        }else{
+            symTab[currentSymTabSize] = newSymTabNode();
+            strncpy(symTab[currentSymTabSize]->identifier,id,IDLENGTH);
+            symTab[currentSymTabSize]->identifier[IDLENGTH-1] = '\0';
+            return (currentSymTabSize++);
+        }
+    }
+}
+
+int lookup(char *s)
+{
+    extern SYMTABNODEPTR symTab[SYMTABSIZE];
+    extern int currentSymTabSize;
+    int i;
+
+    for(i=0; i<currentSymTabSize; i++)
+    {
+        if(strncmp(s,symTab[i]->identifier,IDLENGTH) == 0)
+        {
+            return (i);
+        }
+    }
+    return (-1);
+}
