@@ -85,8 +85,9 @@
 %type<tVal> program declarationList declaration varDeclaration
              varDeclList varDeclId typeSpecifier funDeclaration
              statement expressionStmt selectionStmt iterationStmt
-             expression simpleExpression andExpression unaryRelExpression
-             relExpression relop sumExpression sumop returnStmt mutable
+             expression simpleExpression printExpression andExpression
+             unaryRelExpression relExpression relop sumExpression
+             sumop returnStmt mutable
 
 
 %%

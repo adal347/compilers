@@ -62,7 +62,7 @@ id                       [a-z][a-zA-Z0-9]*
 {number}                 INTEGER_TOKEN(INTEGER)
 {id}                     ID_TOKEN(ID)
 \"[^\n"]*\"              STRING_TOKEN(STRING)
-\'[^\n"]*\'              CHARACTER_TOKEN(STRING)
+\'[^\n"]*\'              CHARACTER_TOKEN(CHARACTER)
 \/\*[^"]*\*\/            ;
 \/\/[^\n"]*              ;
 "\n"                     ;
