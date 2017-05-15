@@ -4,6 +4,10 @@
 #else
 #define TOKEN(t) return (t);
 #endif
+
+#include <strings.h>
+extern SYMTABNODEPTR symTab[SYMTABSIZE];
+extern int currentSymTabSize;
 %}
 
 digit                    [0-9]
