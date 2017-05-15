@@ -363,7 +363,10 @@ void printTree(TERNARY_TREE t, int indent) {
   if(t->nodeIdentifier == INTEGER_VALUE)
     printf("Integer: %d ", t->item);
   else if(t->nodeIdentifier == STRING_VALUE)
-    printf("String: %s ", t->item);
+    if(t->item > 0 && t->item < SYMTABSIZE)
+      printf("Identifier: %s ", symTab[t->item]->identifier);
+    else
+      printf("Unknown identifier: %d", t->item);
   else if(t->nodeIdentifier == ID_VALUE)
     if(t->item > 0 && t->item < SYMTABSIZE)
       printf("Identifier: %s ", symTab[t->item]->identifier);
