@@ -4,11 +4,12 @@
 #define INTEGER_TOKEN(t) printf("Number %d Token: " #t "\n", atoi(yytext));
 #define ID_TOKEN(t) printf("ID %s Token: " #t "\n", yytext);
 #define STRING_TOKEN(t) printf("String %s Token: " #t "\n", yytext);
+#define CHARACTER_TOKEN(t) printf("String %s Token: " #t "\n", yytext);
 #else
 #define TOKEN(t) return (t);
 #define INTEGER_TOKEN(t) yylval.iVal = atoi(yytext); return (t);
 #define ID_TOKEN(t) yylval.iVal = installId(yytext); return (t);
-#define STRING_TOKEN(t) yylval.iVal = installId(yytext); return (t);
+#define CHARACTER_TOKEN(t) yylval.iVal = installId(yytext); return (t);
 #endif
 
 #include <strings.h>
@@ -60,7 +61,8 @@ id                       [a-z][a-zA-Z0-9]*
 ","                      TOKEN(COMA)
 {number}                 INTEGER_TOKEN(INTEGER)
 {id}                     ID_TOKEN(ID)
-\'[^\n"]*\'              STRING_TOKEN(STRING)
+\"[^\n"]*\"              STRING_TOKEN(STRING)
+\'[^\n"]*\'              CHARACTER_TOKEN(STRING)
 \/\*[^"]*\*\/            ;
 \/\/[^\n"]*              ;
 "\n"                     ;

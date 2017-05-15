@@ -12,7 +12,7 @@
                            STATEMENT, EXPRESSIONSTMT, SELECTIONSTMT, ITERATIONSTMT,
                            EXPRESSION, SIMPLEEXPRESSION, ANDEXPRESSION, UNARYRELEXPRESSION,
                            RELEXPRESSION, RELOP, SUMEXPRESSION, SUMOP, RETURNSTMT, MUTABLE,
-                           INTEGER_VALUE, STRING_VALUE, ID_VALUE
+                           INTEGER_VALUE, STRING_VALUE, ID_VALUE, CHARACTER_VALUE
                          };
 
   char *NodeName[] = { "PROGRAM", "DECLARATIONLIST", "DECLARATION", "VARDECLARATION",
@@ -20,7 +20,7 @@
                        "STATEMENT", "EXPRESSIONSTMT", "SELECTIONSTMT", "ITERATIONSTMT",
                        "EXPRESSION", "SIMPLEEXPRESSION", "ANDEXPRESSION", "UNARYRELEXPRESSION",
                        "RELEXPRESSION", "RELOP", "SUMEXPRESSION", "SUMOP", "RETURNSTMT", "MUTABLE",
-                       "INTEGER_VALUE", "STRING_VALUE", "ID_VALUE"
+                       "INTEGER_VALUE", "STRING_VALUE", "ID_VALUE", "CHARACTER_VALUE"
                       };
 
   #ifndef TRUE
@@ -80,7 +80,7 @@
        OR PP MM ASSIGN PLUS MINUS MULT DIVIDE MOD
        OPAREN CPAREN OPCOR CCOR SEMICOLON PLUSEQ
        MINUSEQ COMA
-%token<iVal> ID INTEGER STRING
+%token<iVal> ID INTEGER STRING CHARACTER
 
 %type<tVal> program declarationList declaration varDeclaration
              varDeclList varDeclId typeSpecifier funDeclaration
@@ -240,6 +240,10 @@ expression : typeSpecifier varDeclList
                 {
                   $$ = create_node(NOTHING, EXPRESSION, $1, NULL, NULL, NULL, NULL);
                 }
+             | printExpression
+                {
+                  $$ = create_node(NOTHING, EXPRESSION, $1, NULL, NULL, NULL, NULL);
+                }
 ;
 
 simpleExpression : simpleExpression OR andExpression
@@ -249,6 +253,12 @@ simpleExpression : simpleExpression OR andExpression
                    | andExpression
                     {
                       $$ = create_node(NOTHING, SIMPLEEXPRESSION, $1, NULL, NULL, NULL, NULL);
+                    }
+;
+
+printExpression : PRINT OPCOR STRING CCOR
+                    {
+                      $$ = create_node($3, STRING_VALUE, NULL, NULL, NULL, NULL, NULL);
                     }
 ;
 
@@ -338,9 +348,9 @@ mutable : ID
             {
               $$ = create_node($1, INTEGER_VALUE, NULL, NULL, NULL, NULL, NULL);
             }
-          | STRING
+          | CHARACTER
             {
-              $$ = create_node($1, STRING_VALUE, NULL, NULL, NULL, NULL, NULL);
+              $$ = create_node($1, CHARACTER_VALUE, NULL, NULL, NULL, NULL, NULL);
             }
 ;
 
@@ -570,7 +580,7 @@ void writeCode(TERNARY_TREE t) {
       return;
     case (STRING_VALUE):
       if(t->item > 0 && t->item < SYMTABSIZE)
-        printf("%s ", symTab[t->item]->identifier);
+        printf("printf(%s)", symTab[t->item]->identifier);
       else
         printf("STRING ");
       return;
@@ -582,6 +592,12 @@ void writeCode(TERNARY_TREE t) {
         printf("%s ", symTab[t->item]->identifier);
       else
         printf("a ");
+      return;
+    case (CHARACTER_VALUE):
+      if(t->item > 0 && t->item < SYMTABSIZE)
+        printf("%s ", symTab[t->item]->identifier);
+      else
+        printf("CHAR ");
       return;
     default:
       writeCode(t->first);
