@@ -50,7 +50,9 @@
   typedef TREE_NODE *TERNARY_TREE;
 
   TERNARY_TREE create_node(int, int, TERNARY_TREE, TERNARY_TREE, TERNARY_TREE, TERNARY_TREE, TERNARY_TREE);
+  #ifdef DEBUG
   void printTree(TERNARY_TREE, int);
+  #endif
 
   struct symTabNode {
     char identifier[IDLENGTH];
@@ -92,7 +94,9 @@ program : declarationList
           {
             TERNARY_TREE ParseTree;
             ParseTree = create_node(NOTHING, PROGRAM, $1, NULL, NULL, NULL, NULL);
+            #ifdef DEBUG
             printTree(ParseTree, 0);
+            #endif
           }
 ;
 
@@ -356,6 +360,7 @@ TERNARY_TREE create_node(int ival, int case_identifier, TERNARY_TREE p1,
   return (t);
 }
 
+#ifdef DEBUG
 void printTree(TERNARY_TREE t, int indent) {
   int i = 0;
   if (t == NULL) return;
@@ -383,5 +388,6 @@ void printTree(TERNARY_TREE t, int indent) {
   printTree(t->fourth, indent+3);
   printTree(t->fifth, indent+3);
 }
+#endif
 
 #include "lex.yy.c"

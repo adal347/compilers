@@ -64,9 +64,10 @@ id                       [a-z][a-zA-Z0-9]*
 \/\/[^\n"]*              ;
 "\n"                     ;
 [[:space:]]+             ;
-.                        printf("illegal token\n");
+.                        printf("Error: Unexpected symbol: %s (%d)\n", yytext, yytext[0]);
 %%
 
+#ifndef PRINT
 SYMTABNODEPTR newSymTabNode() {
     return ((SYMTABNODEPTR)malloc(sizeof(SYMTABNODE)));
 }
@@ -107,3 +108,4 @@ int lookup(char *s)
     }
     return (-1);
 }
+#endif
