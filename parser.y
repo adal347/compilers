@@ -531,17 +531,17 @@ void writeCode(TERNARY_TREE t) {
       return;
     case (RELOP):
       if (t->item == LE) {
-        printf(" <= ", t->item);
+        printf(" <= ");
       } else if (t->item == LT) {
-        printf(" < ", t->item);
+        printf(" < ");
       } else if (t->item == GT) {
-        printf(" > ", t->item);
+        printf(" > ");
       } else if (t->item == GE) {
-        printf(" >= ", t->item);
+        printf(" >= ");
       } else if (t->item == EQ) {
-        printf(" == ", t->item);
+        printf(" == ");
       } else if (t->item == NE) {
-        printf(" != ", t->item);
+        printf(" != ");
       }
       return;
     case (SUMEXPRESSION):
@@ -551,9 +551,9 @@ void writeCode(TERNARY_TREE t) {
       return;
     case (SUMOP):
       if (t->item == PLUS) {
-        printf(" + ", t->item);
+        printf(" + ");
       } else {
-        printf(" - ", t->item);
+        printf(" - ");
       }
       return;
     case (RETURNSTMT):
